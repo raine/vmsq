@@ -66,7 +66,7 @@ class VMSQStream extends Readable {
 
       if (last !== ZERO_IP) {
         this.send(buildPacket(last, this.filters), () => {
-          this.timeout = setTimeout(function() {
+          this.timeout = setTimeout(() => {
             this.emit('error', 'timeout: no response in a while')
             socket.close()
           }, 5000)

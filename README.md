@@ -10,7 +10,7 @@ $ npm install vmsq
 
 #### `vmsq(masterServer :: String, filters? :: Object) → Stream`
 
-- `masterServer`: The master server to query, e.g.  'hl2master.steampowered.com:27011'
+- `masterServer`: The master server to query, e.g. `hl2master.steampowered.com:27011`
 - `filters`: Optional object that contains [filters](https://developer.valvesoftware.com/wiki/Master_Server_Query_Protocol#Filter) sent with query
 
 Returns a ReadableStream that emits each server as a string one by one.
@@ -50,3 +50,10 @@ stream.on('end', () => {
 ...
 got 24 servers
 ```
+
+## notes
+
+- The master servers appear to be rate-limited, and sometimes stop replying
+  during queries returning large number of servers. This results in a
+  timeout error being emitted.
+- [Documentation of Master Server Query Protocol](https://developer.valvesoftware.com/wiki/Master_Server_Query_Protocol)

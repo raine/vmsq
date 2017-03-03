@@ -1,6 +1,6 @@
 # vmsq [![npm version](https://badge.fury.io/js/vmsq.svg)](http://badge.fury.io/js/vmsq)
 
-query valve's master servers
+a library for querying valve's master servers with node.js
 
 ```sh
 $ npm install vmsq

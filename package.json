@@ -1,6 +1,6 @@
 {
   "name": "vmsq",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "query valve's master servers",
   "main": "index.js",
   "scripts": {

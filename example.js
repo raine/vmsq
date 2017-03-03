@@ -1,6 +1,6 @@
 const vmsq = require('.')
 
-const stream = vmsq('hl2master.steampowered.com:27011', {
+const stream = vmsq('hl2master.steampowered.com:27011', vmsq.EUROPE, {
   gamedir: 'cstrike',
   map: 'de_nuke',
   empty: 1

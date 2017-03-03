@@ -8,9 +8,10 @@ $ npm install vmsq
 
 ## usage
 
-#### `vmsq(masterServer :: String, filters? :: Object) → ReadableStream`
+#### `vmsq(masterServer :: String, region :: Number, filters? :: Object) → ReadableStream`
 
 - `masterServer`: The master server to query, e.g. `hl2master.steampowered.com:27011`
+- `region`: Region to query, e.g. `0x03` or `vmsq.EUROPE`
 - `filters`: Optional object that contains [filters][filters] sent with the query
 
 Returns a [`ReadableStream`][readablestream] emitting each server as a string one by one.
@@ -20,7 +21,7 @@ Returns a [`ReadableStream`][readablestream] emitting each server as a string on
 ```js
 const vmsq = require('vmsq')
 
-const stream = vmsq('hl2master.steampowered.com:27011', {
+const stream = vmsq('hl2master.steampowered.com:27011', vmsq.EUROPE, {
   gamedir: 'cstrike',
   map: 'de_nuke'
   empty: 1

@@ -4,6 +4,18 @@ const inet_ntoa = require('./lib/inet_ntoa')
 const RESPONSE_START = Buffer.from([ 0xFF, 0xFF, 0xFF, 0xFF, 0x66, 0x0A ])
 const ZERO_IP = '0.0.0.0:0'
 
+const REGIONS = {
+  US_EAST_COAST : 0x00,
+  US_WEST_COAST : 0x01,
+  SOUTH_AMERICA : 0x02,
+  EUROPE        : 0x03,
+  ASIA          : 0x04,
+  AUSTRALIA     : 0x05,
+  MIDDLE_EAST   : 0x06,
+  AFRICA        : 0x07,
+  ALL           : 0xFF
+}
+
 const formatFilters = (obj) => {
   let str = ''
   for (let key in obj) {
@@ -27,24 +39,24 @@ const parse = function* (buf) {
   }
 }
 
-// TODO: region as argument
-const buildPacket = (seedIp, filters) =>
+const buildPacket = (seedIp, region, filters) =>
   Buffer.concat([
     Buffer.from([ 0x31 ]),
-    Buffer.from([ 0xFF ]), // REGION
+    Buffer.from([ region ]),
     Buffer.from(seedIp, 'ascii'), Buffer.from([ 0x00 ]),
-    Buffer.from(formatFilters(filters || {}), 'ascii'),
+    Buffer.from(formatFilters(filters), 'ascii'),
   ])
 
 const Readable = require('stream').Readable
 
 class VMSQStream extends Readable {
-  constructor(master, filters) {
+  constructor(master, region, filters) {
     super({ encoding: 'utf8' })
     const [host, port] = master.split(':')
     this.masterHost = host
     this.masterPort = parseInt(port)
-    this.filters = filters
+    this.region = region
+    this.filters = filters || {}
     this.querying = false
     this.timeout = null
 
@@ -65,7 +77,7 @@ class VMSQStream extends Readable {
       }
 
       if (last !== ZERO_IP) {
-        this.send(buildPacket(last, this.filters), () => {
+        this.send(buildPacket(last, this.region, this.filters), () => {
           this.timeout = setTimeout(() => {
             this.emit('error', 'timeout: no response in a while')
             socket.close()
@@ -92,10 +104,15 @@ class VMSQStream extends Readable {
 
   _read() {
     if (this.querying === false) {
-      this.send(buildPacket(ZERO_IP, this.filters))
+      this.send(buildPacket(ZERO_IP, this.region, this.filters))
       this.querying = true
     }
   }
 }
 
-module.exports = (master, filters) => new VMSQStream(master, filters)
+module.exports = (...args) =>
+  new VMSQStream(...args)
+
+for (let key in REGIONS) {
+  module.exports[key] = REGIONS[key]
+}

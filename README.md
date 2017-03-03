@@ -23,7 +23,7 @@ const vmsq = require('vmsq')
 
 const stream = vmsq('hl2master.steampowered.com:27011', vmsq.EUROPE, {
   gamedir: 'cstrike',
-  map: 'de_nuke'
+  map: 'de_nuke',
   empty: 1
 })
 

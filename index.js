@@ -16,10 +16,23 @@ const REGIONS = {
   ALL           : 0xFF
 }
 
+const slashify = (obj) => {
+  let str = ''
+  for (let key in obj) {
+    let val = obj[key]
+    str += '\\' + key + '\\' + val
+  }
+  return str
+}
+
 const formatFilters = (obj) => {
   let str = ''
   for (let key in obj) {
-    str += '\\' + key + '\\' + obj[key]
+    let val = obj[key]
+    str += '\\' + key + '\\'
+    str += (key === 'nor' || key === 'nand')
+      ? Object.keys(val).length + slashify(val)
+      : val
   }
   str += '\x00'
   return str

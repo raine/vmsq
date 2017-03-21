@@ -52,6 +52,24 @@ stream.on('end', () => {
 got 24 servers
 ```
 
+## more on filters
+
+> \nor\[x]	A special filter, specifies that servers matching any of the following [x] conditions should not be returned
+> \nand\[x]	A special filter, specifies that servers matching all of the following [x] conditions should not be returned
+
+`nor` and `nand` filters are handled in a slightly different way and take an object:
+
+```js
+vmsq('hl2master.steampowered.com:27011', vmsq.EUROPE, {
+  gamedir: 'cstrike',
+
+  // don't return servers that match all of the conditions
+  nand: {
+    map: 'de_nuke'
+  }
+})
+```
+
 ## notes
 
 - The master servers appear to be rate-limited, and sometimes stop replying
